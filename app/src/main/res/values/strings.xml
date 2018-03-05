@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Filtering Matches</string>
+    <string name="s_btn_login">Login</string>
+    <string name="s_label_user_id">User Id</string>
+    <string name="s_label_password">Password</string>
+    <string name="s_label_name">Name:</string>
+    <string name="s_label_age">Age:</string>
+    <string name="s_label_job_title">Job Title:</string>
+    <string name="s_label_height">Height:</string>
+    <string name="s_label_city">City:</string>
+    <string name="s_label_compatibility_score">Compatibility Score:</string>
+    <string name="s_label_contacts_exchanged">Contacts Exchanged:</string>
+    <string name="s_label_favourite">Favourite:</string>
+    <string name="s_label_religion">Religion:</string>
+</resources>
