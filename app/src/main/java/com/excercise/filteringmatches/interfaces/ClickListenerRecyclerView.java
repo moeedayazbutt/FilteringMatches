@@ -6,6 +6,7 @@ import android.view.View;
 import com.excercise.filteringmatches.R;
 
 /**
+ * Created by Khurram Shehzad on 6/24/2016.
  */
 public class ClickListenerRecyclerView {
     private final RecyclerView mRecyclerView;

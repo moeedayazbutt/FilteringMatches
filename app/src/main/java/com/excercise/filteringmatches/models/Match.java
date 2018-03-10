@@ -1,19 +1,21 @@
 package com.excercise.filteringmatches.models;
 
 /**
+ * Created by khurr on 3/4/2018.
  */
 
 public class Match {
-    String displayName;
-    Integer age;
-    String jobTitle;
-    Integer heightInCm;
-    String mainPhoto;
-    Double compatibilityScore;
-    Integer contactsExchanged;
-    boolean favourite;
-    String religion;
-    City city;
+    private String displayName;
+    private Integer age;
+    private String jobTitle;
+    private Integer heightInCm;
+    private String mainPhoto;
+    private Double compatibilityScore;
+    private Integer contactsExchanged;
+    private boolean favourite;
+    private String religion;
+    private City city;
+    private int distanceInKm;
 
     public Match(String displayName, Integer age, String jobTitle, Integer heightInCm, String mainPhoto, Double compatibilityScore, Integer contactsExchanged, boolean favourite, String religion, City city) {
         this.displayName = displayName;
@@ -106,5 +108,13 @@ public class Match {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public int getDistanceInKm() {
+        return distanceInKm;
+    }
+
+    public void setDistanceInKm(int distanceInKm) {
+        this.distanceInKm = distanceInKm;
     }
 }

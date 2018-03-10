@@ -2,6 +2,7 @@ package com.excercise.filteringmatches.fragments;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,13 +16,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.excercise.filteringmatches.R;
+import com.excercise.filteringmatches.activities.ActivityMain;
 import com.excercise.filteringmatches.adapters.AdapterMatches;
 import com.excercise.filteringmatches.core.FragmentBase;
+import com.excercise.filteringmatches.interfaces.AndroidRuntimePermissionCallBack;
 import com.excercise.filteringmatches.interfaces.ClickListenerRecyclerView;
+import com.excercise.filteringmatches.interfaces.RequestKnownLocationCallBack;
 import com.excercise.filteringmatches.models.City;
 import com.excercise.filteringmatches.models.Match;
 import com.excercise.filteringmatches.utils.ManagerJson;
@@ -35,6 +42,8 @@ import java.util.ArrayList;
 
 import me.bendik.simplerangeview.SimpleRangeView;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.excercise.filteringmatches.constants.Constants.MY_PERMISSIONS_REQUEST_GET_LOCATION;
 import static com.excercise.filteringmatches.constants.JsonConstants.JSON_DATA_ROOT_KEY;
 import static com.excercise.filteringmatches.constants.JsonConstants.JSON_FILE_NAME;
 import static com.excercise.filteringmatches.constants.JsonConstants.JSON_KEY_AGE;
@@ -53,9 +62,10 @@ import static com.excercise.filteringmatches.constants.JsonConstants.JSON_KEY_RE
 import static com.excercise.filteringmatches.utils.ManagerJson.loadJSONFromAsset;
 
 /**
+ * Created by khurr on 3/4/2018.
  */
 
-public class FragmentMatchesList extends FragmentBase{
+public class FragmentMatchesList extends FragmentBase implements AndroidRuntimePermissionCallBack, RequestKnownLocationCallBack{
 
     private ProgressDialog progressDialog;
     private RecyclerView mRecyclerView;
@@ -65,6 +75,8 @@ public class FragmentMatchesList extends FragmentBase{
     private Snackbar filterSnackbar;
 
     private ArrayList<Match> matchList = new ArrayList<>();
+    private ArrayList<Match> filteredMatchList;
+    private boolean isDistanceFilterEnabled;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -146,6 +158,7 @@ public class FragmentMatchesList extends FragmentBase{
             cbAge.setChecked(false);
             cbCompatibilityScore.setChecked(false);
             cbHeight.setChecked(false);
+            cbDistance.setChecked(false);
 
             rngHeight.setStart(0);
             rngHeight.setEnd(75);
@@ -153,6 +166,7 @@ public class FragmentMatchesList extends FragmentBase{
             rngAge.setEnd(77);
             rngCompatibilityScore.setStart(0);
             rngCompatibilityScore.setEnd(98);
+            npDistance.setValue(30);
 
             ((AdapterMatches) mAdapter).updateData(matchList);
             btnCancelFilter.callOnClick();
@@ -162,8 +176,8 @@ public class FragmentMatchesList extends FragmentBase{
     private View.OnClickListener clickListenerApplyFilterButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-            ArrayList<Match> filteredMatchList = new ArrayList<>();
+            progressDialog.show();
+            filteredMatchList = new ArrayList<>();
             filteredMatchList.addAll(matchList);
 
             if(cbContact.isChecked()){
@@ -315,14 +329,21 @@ public class FragmentMatchesList extends FragmentBase{
                 filteredMatchList = new ArrayList<>();
                 filteredMatchList.addAll(tempFilteredMatchList);
             }
-            ((AdapterMatches) mAdapter).updateData(filteredMatchList);
-            btnCancelFilter.callOnClick();
+            if(cbDistance.isChecked()){
+                calculateDistanceInKM(((ActivityMain)activity).isPermissionGranted(ACCESS_FINE_LOCATION));
+            }
+            else {
+                ((AdapterMatches) mAdapter).updateData(filteredMatchList);
+                btnCancelFilter.callOnClick();
+                progressDialog.dismiss();
+            }
         }
     };
 
     private View snackView;
+    private NumberPicker npDistance;
     private Button btnCancelFilter, btnApplyFilter, btnResetFilter;
-    private CheckBox cbFavourite, cbContact, cbPhoto, cbCompatibilityScore, cbAge, cbHeight;
+    private CheckBox cbFavourite, cbContact, cbPhoto, cbCompatibilityScore, cbAge, cbHeight, cbDistance;
     private Switch swtFavourite, swtContact, swtPhoto;
     private SimpleRangeView rngCompatibilityScore, rngAge, rngHeight;
     private TextView tvStartRangeCompatibilityScore, tvEndRangeCompatibilityScore, tvStartRangeAge, tvEndRangeAge, tvStartRangeHeight, tvEndRangeHeight;
@@ -334,6 +355,8 @@ public class FragmentMatchesList extends FragmentBase{
         TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         snackView = activity.getLayoutInflater().inflate(R.layout.layout_filters, null);
+
+        npDistance = (NumberPicker) snackView.findViewById(R.id.npDistance);
 
         rngCompatibilityScore = (SimpleRangeView) snackView.findViewById(R.id.rngCompatibilityScore);
         rngAge = (SimpleRangeView) snackView.findViewById(R.id.rngAge);
@@ -352,6 +375,7 @@ public class FragmentMatchesList extends FragmentBase{
         cbCompatibilityScore = (CheckBox) snackView.findViewById(R.id.cbCompatibilityScore);
         cbAge = (CheckBox) snackView.findViewById(R.id.cbAge);
         cbHeight = (CheckBox) snackView.findViewById(R.id.cbHeight);
+        cbDistance = (CheckBox) snackView.findViewById(R.id.cbDistance);
 
         swtFavourite = (Switch) snackView.findViewById(R.id.swtFavourite);
         swtContact = (Switch) snackView.findViewById(R.id.swtContact);
@@ -364,6 +388,11 @@ public class FragmentMatchesList extends FragmentBase{
         btnCancelFilter.setOnClickListener(clickListenerCancelFilterButton);
         btnApplyFilter.setOnClickListener(clickListenerApplyFilterButton);
         btnResetFilter.setOnClickListener(clickListenerResetFilterButton);
+
+        npDistance.setMinValue(30);
+        npDistance.setMaxValue(300);
+
+        cbDistance.setOnCheckedChangeListener(cbDistanceChangeListener);
 
         layout.addView(snackView, 0);
 
@@ -400,6 +429,61 @@ public class FragmentMatchesList extends FragmentBase{
                 tvEndRangeHeight.setText(String.valueOf(end + 135));
             }
         });
+    }
+
+    @Override
+    public void onRequestedPermissionGranted(String[] permissions, int callBackInt) {
+
+    }
+
+    @Override
+    public void onRequestedPermissionDenied(String[] permissions, int callBackInt) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if(isDistanceFilterEnabled) {
+            ArrayList<Match> tempFilteredMatchList = new ArrayList<>();
+            tempFilteredMatchList.addAll(filteredMatchList);
+
+            int distanceUserValue = npDistance.getValue();
+
+            for (int index = 0; index < filteredMatchList.size(); index++) {
+                Match match = filteredMatchList.get(index);
+                if (match != null && match.getCity() != null && match.getCity().getLat() != null && match.getCity().getLon() != null) {
+                    int distance = distanceBetweenPoints(location.getLatitude(), location.getLongitude(), match.getCity().getLat(), match.getCity().getLon());
+                    if (distanceUserValue == distance) {
+
+                    } else {
+                        tempFilteredMatchList.remove(match);
+                    }
+                }
+            }
+
+            filteredMatchList = new ArrayList<>();
+            filteredMatchList.addAll(tempFilteredMatchList);
+
+            ((AdapterMatches) mAdapter).updateData(filteredMatchList);
+            btnCancelFilter.callOnClick();
+            progressDialog.dismiss();
+
+            isDistanceFilterEnabled = false;
+        }
+    }
+
+    private int distanceBetweenPoints(double lat_a, double lng_a, double lat_b, double lng_b) {
+        Location locationA = new Location("point A");
+
+        locationA.setLatitude(lat_a);
+        locationA.setLongitude(lng_a);
+
+        Location locationB = new Location("point B");
+
+        locationB.setLatitude(lat_b);
+        locationB.setLongitude(lng_b);
+
+        return (int) (locationA.distanceTo(locationB) / 1000);
     }
 
     private class LoadJsonData extends AsyncTask<String, Void, String> {
@@ -450,6 +534,61 @@ public class FragmentMatchesList extends FragmentBase{
 
         @Override
         protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+    private CompoundButton.OnCheckedChangeListener cbDistanceChangeListener = new CompoundButton.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(isChecked) {
+                ActivityMain activityMain = (ActivityMain) activity;
+                if (activityMain != null) {
+                    if (activityMain.isPermissionGranted(ACCESS_FINE_LOCATION)) {
+                        Toast.makeText(activityMain, "Permission already Granted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        activityMain.setPermissionCallBack(FragmentMatchesList.this);
+                        activityMain.requestRuntimePermission(ACCESS_FINE_LOCATION, MY_PERMISSIONS_REQUEST_GET_LOCATION);
+                    }
+                }
+            }
+        }
+    };
+
+    private void calculateDistanceInKM(boolean isPermissionGranted){
+        if(isPermissionGranted){
+            ActivityMain activityMain = (ActivityMain) activity;
+            if (activityMain != null) {
+                activityMain.setLocationCallBack(FragmentMatchesList.this);
+                activityMain.requestCurrentKnownLocation();
+                isDistanceFilterEnabled = true;
+            }
+        }
+        else {
+            Match assumedLoginUser = matchList.get(0);
+            ArrayList<Match> tempFilteredMatchList = new ArrayList<>();
+            tempFilteredMatchList.addAll(filteredMatchList);
+
+            int distanceUserValue = npDistance.getValue();
+
+            for (int index = 0; index < filteredMatchList.size(); index++) {
+                Match match = filteredMatchList.get(index);
+                if (match != null && match.getCity() != null && match.getCity().getLat() != null && match.getCity().getLon() != null) {
+                    int distance = distanceBetweenPoints(assumedLoginUser.getCity().getLat(), assumedLoginUser.getCity().getLon(), match.getCity().getLat(), match.getCity().getLon());
+                    if (distanceUserValue == distance) {
+
+                    } else {
+                        tempFilteredMatchList.remove(match);
+                    }
+                }
+            }
+
+            filteredMatchList = new ArrayList<>();
+            filteredMatchList.addAll(tempFilteredMatchList);
+
+            ((AdapterMatches) mAdapter).updateData(filteredMatchList);
+            btnCancelFilter.callOnClick();
+            progressDialog.dismiss();
         }
     }
 }

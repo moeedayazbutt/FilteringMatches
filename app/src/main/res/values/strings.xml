@@ -12,4 +12,7 @@
     <string name="s_label_contacts_exchanged">Contacts Exchanged:</string>
     <string name="s_label_favourite">Favourite:</string>
     <string name="s_label_religion">Religion:</string>
+    <string name="ok">OK</string>
+    <string name="text_request_permission">Application Need To Access Your Location For Applying Distance Filter</string>
+    <string name="title_request_permission">Access Required</string>
 </resources>

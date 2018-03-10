@@ -12,6 +12,7 @@ import com.excercise.filteringmatches.activities.ActivityMain;
 
 
 /**
+ * Created by Khurram Shehzad on 6/24/2016.
  */
 public class FragmentBase extends Fragment {
     protected Activity activity;

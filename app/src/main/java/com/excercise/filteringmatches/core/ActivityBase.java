@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.excercise.filteringmatches.R;
 
 /**
+ * Created by Khurram Shehzad on 6/23/2016.
  */
 public class ActivityBase extends AppCompatActivity {
 

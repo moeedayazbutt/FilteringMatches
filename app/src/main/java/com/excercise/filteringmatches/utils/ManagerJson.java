@@ -14,6 +14,7 @@ import java.io.InputStream;
 import static com.excercise.filteringmatches.constants.JsonConstants.JSON_CHARSET_NAME;
 
 /**
+ * Created by khurr on 3/4/2018.
  */
 
 public class ManagerJson {

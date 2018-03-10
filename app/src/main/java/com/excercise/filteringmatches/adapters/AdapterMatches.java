@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Created by khurr on 3/4/2018.
  */
 
 public class AdapterMatches extends RecyclerView.Adapter<AdapterMatches.ViewHolder> {
@@ -80,6 +81,7 @@ public class AdapterMatches extends RecyclerView.Adapter<AdapterMatches.ViewHold
                     )
                     .into(holder.ivMainPhoto);
         }else {
+            holder.ivMainPhoto.setImageDrawable(null);
             glide.clear(holder.ivMainPhoto);
         }
         if(match.getDisplayName() != null){

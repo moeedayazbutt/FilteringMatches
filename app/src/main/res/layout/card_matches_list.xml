@@ -32,11 +32,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_name"/>
+                    android:text="@string/s_label_name"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvDisplayName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,11 +47,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_age"/>
+                    android:text="@string/s_label_age"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvAge"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,11 +62,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_job_title"/>
+                    android:text="@string/s_label_job_title"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvJobTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,11 +77,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_height"/>
+                    android:text="@string/s_label_height"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvHeight"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,11 +92,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_city"/>
+                    android:text="@string/s_label_city"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvCity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,11 +107,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_compatibility_score"/>
+                    android:text="@string/s_label_compatibility_score"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvCompatibilityScore"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,11 +122,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_contacts_exchanged"/>
+                    android:text="@string/s_label_contacts_exchanged"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvContactsExchanged"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,11 +137,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_favourite"/>
+                    android:text="@string/s_label_favourite"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvFavourite"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -136,11 +152,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/s_label_religion"/>
+                    android:text="@string/s_label_religion"
+                    style="@style/cardListHeading" />
                 <TextView
                     android:id="@+id/tvReligion"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cardListContent" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
